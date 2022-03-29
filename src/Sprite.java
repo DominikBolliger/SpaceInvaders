@@ -6,10 +6,7 @@ public class Sprite {
     private Image image;
     private boolean dying;
 
-    int x;
-    int y;
-    int dx;
-    int dy;
+    int x, y, dx, dy;
 
     public Sprite(){
         visible = true;

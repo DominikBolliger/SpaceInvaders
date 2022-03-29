@@ -1,9 +1,16 @@
+import java.awt.*;
+
 public interface Commons {
-    final int BOARD_WIDTH = 800;
-    final int BOARD_HEIGHT = 600;
+    int BOARD_WIDTH = 800;
+    int BOARD_HEIGHT = 600;
+    Color BOARD_BACKGROUND = Color.BLACK;
 
-    final int DELAY = 1;
+    int DELAY = 10;
 
-    final int PLAYER_SPEED = 5;
+    int PLAYER_SPEED = 2;
+
+    int AMOUNT_OF_STARS = 100;
+
+    int AMOUNT_OF_BULLETS = 10;
 
 }

@@ -4,13 +4,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Board extends JPanel {
 
     private Timer timer;
     private Player player;
     private boolean inGame = true;
-    private Shot shot;
+    private ArrayList<Shot> shots;
+    private ArrayList<Sky> stars;
+    private Random rnd;
 
     public Board(){
         initBoard();
@@ -18,13 +22,29 @@ public class Board extends JPanel {
     }
 
     private void gameInit() {
+
+        //Create Player
         player = new Player();
+
+        //Ceate stars List
+        stars = new ArrayList<>();
+        for (int i = 0; i < Commons.AMOUNT_OF_STARS; i++) {
+            Sky star = new Sky();
+            stars.add(star);
+        }
+
+        //Create shots List
+        shots = new ArrayList<>();
+        for (int i = 0; i < Commons.AMOUNT_OF_BULLETS; i++) {
+            Shot bullet = new Shot(0, 0);
+            shots.add(bullet);
+        }
     }
 
     private void initBoard() {
         addKeyListener(new TAdapter());
         setFocusable(true);
-        setBackground(Color.black);
+        setBackground(Commons.BOARD_BACKGROUND);
         timer = new Timer(Commons.DELAY, new GameCycle());
         timer.start();
     }
@@ -36,13 +56,28 @@ public class Board extends JPanel {
     }
 
     private void doDrawing(Graphics g) {
+        //drawSky(g);
+        drawShot(g);
         drawPlayer(g);
+    }
+
+    private void drawShot(Graphics g) {
+        for(Shot bullet:shots){
+            if (bullet.isVisible()){
+                g.drawImage(bullet.getImage(), bullet.getX(), bullet.getY(), this);
+            }
+        }
+    }
+
+    private void drawSky(Graphics g){
+        for (Sky star:stars) {
+            g.drawImage(star.getImage(), star.getX(), star.getY(), this);
+        }
     }
 
     private void drawPlayer(Graphics g) {
 
         if (player.isVisible()) {
-            System.out.println(player.getX() + " " + player.getY());
             g.drawImage(player.getImage(), player.getX(), player.getY(), this);
         }
 
@@ -60,7 +95,30 @@ public class Board extends JPanel {
     }
 
     private void update(){
+
+        //Player
         player.act();
+
+        //Sky
+        rnd = new Random();
+        for (Sky star:stars) {
+            star.moveSky();
+            if (star.getY() >= Commons.BOARD_HEIGHT){
+                star.setY(-10);
+                star.setDx(rnd.nextInt(4 + 2) -2 );
+                star.setDy(rnd.nextInt(4 + 1 -2) + 2);
+            } else if (star.getX() < 0 || star.getX() > Commons.BOARD_WIDTH){
+                star.setY(-15);
+                star.setX(rnd.nextInt(Commons.BOARD_WIDTH));
+                star.setDx(rnd.nextInt(4 + 2) -2 );
+                star.setDy(rnd.nextInt(4 + 1 -2) + 2);
+            }
+        }
+
+        //Shot
+        for (Shot bullet:shots){
+            bullet.moveShot();
+        }
     }
 
     private void doGameCycle() {
@@ -85,16 +143,17 @@ public class Board extends JPanel {
             int key = e.getKeyCode();
 
             if (key == KeyEvent.VK_SPACE) {
-
                 if (inGame) {
-
-//                    if (!shot.isVisible()) {
-//
-//                        shot = new Shot(x, y);
-//                    }
+                    for(Shot bullet:shots){
+                        if (!bullet.isVisible() ) {
+                            bullet.setX(x + 24);
+                            bullet.setY(y - 15);
+                            bullet.setVisible(true);
+                            break;
+                        }
+                    }
                 }
             }
         }
     }
-
 }

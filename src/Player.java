@@ -34,13 +34,22 @@ public class Player extends Sprite{
         x += dx;
         y += dy;
 
-        if (x <= 2) {
-            x = 2;
+        if (x <= 0) {
+            x = 0;
         }
 
-        if (x >= Commons.BOARD_WIDTH - 2 * width) {
-            x = Commons.BOARD_WIDTH - 2 * width;
+        if (x >= Commons.BOARD_WIDTH -80) {
+            x = Commons.BOARD_WIDTH -80;
         }
+
+        if (y <= 0){
+            y = 0;
+        }
+
+        if (y >= Commons.BOARD_HEIGHT -102) {
+            y = Commons.BOARD_HEIGHT -102;
+        }
+
     }
 
     public void keyPressed(KeyEvent e) {
@@ -56,11 +65,11 @@ public class Player extends Sprite{
         }
 
         if (key == KeyEvent.VK_UP) {
-            dx = -Commons.PLAYER_SPEED;
+            dy = -Commons.PLAYER_SPEED;
         }
 
         if (key == KeyEvent.VK_DOWN) {
-            dx = Commons.PLAYER_SPEED;
+            dy = Commons.PLAYER_SPEED;
         }
 
     }
@@ -75,6 +84,14 @@ public class Player extends Sprite{
 
         if (key == KeyEvent.VK_RIGHT) {
             dx = 0;
+        }
+
+        if (key == KeyEvent.VK_UP) {
+            dy = 0;
+        }
+
+        if (key == KeyEvent.VK_DOWN) {
+            dy = 0;
         }
     }
 }
