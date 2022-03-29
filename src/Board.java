@@ -11,9 +11,12 @@ public class Board extends JPanel {
 
     private Timer timer;
     private Player player;
+    private SkyBack sky;
     private boolean inGame = true;
     private ArrayList<Shot> shots;
-    private ArrayList<Sky> stars;
+    private ArrayList<Stars> stars;
+    private ArrayList<Enemy> enemies;
+    private ArrayList<SkyBack> skybacks;
     private Random rnd;
 
     public Board(){
@@ -29,15 +32,25 @@ public class Board extends JPanel {
         //Ceate stars List
         stars = new ArrayList<>();
         for (int i = 0; i < Commons.AMOUNT_OF_STARS; i++) {
-            Sky star = new Sky();
-            stars.add(star);
+            stars.add(new Stars());
         }
 
         //Create shots List
         shots = new ArrayList<>();
         for (int i = 0; i < Commons.AMOUNT_OF_BULLETS; i++) {
-            Shot bullet = new Shot(0, 0);
-            shots.add(bullet);
+            shots.add(new Shot(0, 0));
+        }
+        
+        //Create Enemies
+        enemies = new ArrayList<>();
+        for (int i = 0; i < Commons.AMMOUNT_OF_ENEMIES; i++) {
+            enemies.add(new Enemy());
+        }
+
+        //Create Sky
+        skybacks = new ArrayList<>();
+        for (int i = 0; i < 2; i++) {
+            skybacks.add(new SkyBack(0, i * Commons.BOARD_HEIGHT));
         }
     }
 
@@ -56,9 +69,12 @@ public class Board extends JPanel {
     }
 
     private void doDrawing(Graphics g) {
+
+        drawSkyBack(g);
         //drawSky(g);
         drawShot(g);
         drawPlayer(g);
+        drawEnemie(g);
     }
 
     private void drawShot(Graphics g) {
@@ -70,7 +86,7 @@ public class Board extends JPanel {
     }
 
     private void drawSky(Graphics g){
-        for (Sky star:stars) {
+        for (Stars star:stars) {
             g.drawImage(star.getImage(), star.getX(), star.getY(), this);
         }
     }
@@ -87,6 +103,22 @@ public class Board extends JPanel {
         }
     }
 
+    private void drawSkyBack(Graphics g){
+        for(SkyBack sky:skybacks){
+            if (sky.isVisible()) {
+                g.drawImage(sky.getImage(), sky.getX(), sky.getY(), this);
+            }
+        }
+    }
+    
+    private void drawEnemie(Graphics g){
+        for (Enemy enemy:enemies){
+            if (enemy.isVisible()) {
+                g.drawImage(enemy.getImage(), enemy.getX(), enemy.getY(), this);
+            }   
+        }
+    }
+
     public class GameCycle implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -100,19 +132,14 @@ public class Board extends JPanel {
         player.act();
 
         //Sky
+        for(SkyBack sky:skybacks){
+            sky.moveSky(player.getDy());
+        }
+
+        //Stars
         rnd = new Random();
-        for (Sky star:stars) {
-            star.moveSky();
-            if (star.getY() >= Commons.BOARD_HEIGHT){
-                star.setY(-10);
-                star.setDx(rnd.nextInt(4 + 2) -2 );
-                star.setDy(rnd.nextInt(4 + 1 -2) + 2);
-            } else if (star.getX() < 0 || star.getX() > Commons.BOARD_WIDTH){
-                star.setY(-15);
-                star.setX(rnd.nextInt(Commons.BOARD_WIDTH));
-                star.setDx(rnd.nextInt(4 + 2) -2 );
-                star.setDy(rnd.nextInt(4 + 1 -2) + 2);
-            }
+        for (Stars star:stars) {
+            star.moveStars(player.getX() + 24, player.getY() + 30);
         }
 
         //Shot

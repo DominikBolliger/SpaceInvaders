@@ -13,4 +13,6 @@ public interface Commons {
 
     int AMOUNT_OF_BULLETS = 10;
 
+    int AMMOUNT_OF_ENEMIES = 1;
+
 }

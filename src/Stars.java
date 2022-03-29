@@ -2,15 +2,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
-public class Sky extends Sprite{
+public class Stars extends Sprite{
 
     private Random rnd;
 
-    public Sky(){
-        initSky();
+    public Stars(){
+        initStars();
     }
 
-    private void initSky() {
+    private void initStars() {
 
         String shotImage = "";
         Random rnd = new Random();
@@ -37,27 +37,31 @@ public class Sky extends Sprite{
                 break;
         }
 
-
-
         rnd = new Random();
         int scale = rnd.nextInt(20 + 1 - 10) + 10;
         ImageIcon ii = new ImageIcon(shotImage);
         setImage(ii.getImage().getScaledInstance(scale, scale, Image.SCALE_SMOOTH));
 
-        int START_X = rnd.nextInt(Commons.BOARD_WIDTH);
-        setX(START_X);
-
-        int START_Y = rnd.nextInt(-10 + 1 + 140) -140;
-        setY(START_Y);
 
         setDx(rnd.nextInt(4 + 2) -2 );
         setDy(rnd.nextInt(4 + 1 -2) + 2);
 
     }
 
-    public void moveSky(){
+    public void moveStars(int newX, int newY){
         x += dx;
         y += dy;
+
+        System.out.println(x + " " + y);
+
+        if (getY() >= Commons.BOARD_HEIGHT){
+            setY(newY);
+            setX(newX);
+        } else if (getX() < 0 || getX() > Commons.BOARD_WIDTH){
+            setY(newY);
+            setX(newX);
+        }
+
     }
 
 }

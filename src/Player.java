@@ -25,7 +25,7 @@ public class Player extends Sprite{
         int START_X = 270;
         setX(START_X);
 
-        int START_Y = 280;
+        int START_Y = 495;
         setY(START_Y);
     }
 
