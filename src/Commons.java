@@ -11,7 +11,7 @@ public interface Commons {
 
     int AMOUNT_OF_STARS = 100;
 
-    int AMOUNT_OF_BULLETS = 10;
+    int AMOUNT_OF_BULLETS = 1;
 
     int AMMOUNT_OF_ENEMIES = 1;
 

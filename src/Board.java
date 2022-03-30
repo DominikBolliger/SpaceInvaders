@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.geom.Area;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -12,6 +13,8 @@ public class Board extends JPanel {
     private Timer timer;
     private Player player;
     private SkyBack sky;
+    private Polygon playerPoly;
+    private Polygon enemyPoly;
     private boolean inGame = true;
     private ArrayList<Shot> shots;
     private ArrayList<Stars> stars;
@@ -70,11 +73,53 @@ public class Board extends JPanel {
 
     private void doDrawing(Graphics g) {
 
-        drawSkyBack(g);
+        //drawSkyBack(g);
         //drawSky(g);
         drawShot(g);
         drawPlayer(g);
         drawEnemie(g);
+        drawPlayerBox(g);
+        drawEnemyBox(g);
+    }
+
+    private void drawEnemyBox(Graphics g) {
+        for (Enemy enemy:enemies){
+            if (enemy.isVisible()) {
+
+                int width = enemy.getImage().getWidth(this);
+                int height = enemy.getImage().getHeight(this);
+                int x = enemy.getX();
+                int y = enemy.getY() + 10;
+
+                int[] xpoints = {x, x + width, x + width/2};
+                int[] ypoints = {y, y, y + height};
+                int npoints = 3;
+
+                enemyPoly = new Polygon(xpoints, ypoints, npoints);
+
+                g.setColor(new Color(255,0,0,255));
+                g.drawPolygon(enemyPoly);
+            }
+        }
+    }
+
+    private void drawPlayerBox(Graphics g) {
+        if (player.isVisible()) {
+
+            int width = player.getImage().getWidth(this);
+            int height = player.getImage().getHeight(this);
+            int x = player.getX();
+            int y = player.getY() + 10;
+
+            int[] xpoints = {x, x + width, x + width/2};
+            int[] ypoints = {y + height-10, y + height -10, y};
+            int npoints = 3;
+
+            playerPoly = new Polygon(xpoints, ypoints, npoints);
+
+            g.setColor(new Color(255, 0, 0, 255));
+            g.drawPolygon(playerPoly);
+        }
     }
 
     private void drawShot(Graphics g) {
@@ -145,6 +190,14 @@ public class Board extends JPanel {
         //Shot
         for (Shot bullet:shots){
             bullet.moveShot();
+            for (Enemy enemy:enemies){
+
+                System.out.println("bullX: " + bullet.getX() + " | enemX: " + enemy.getX() + " | Image Width: " + enemy.getImage().getWidth(this));
+
+                if (bullet.getX() >= enemy.getX() && bullet.getX() <= enemy.getX() + enemy.getImage().getWidth(this)){
+                    System.out.println("collision");
+                }
+            }
         }
     }
 

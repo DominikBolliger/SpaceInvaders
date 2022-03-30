@@ -52,8 +52,6 @@ public class Stars extends Sprite{
         x += dx;
         y += dy;
 
-        System.out.println(x + " " + y);
-
         if (getY() >= Commons.BOARD_HEIGHT){
             setY(newY);
             setX(newX);

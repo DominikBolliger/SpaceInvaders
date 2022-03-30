@@ -29,8 +29,5 @@ public class Shot extends Sprite{
             this.die();
             this.setDying(true);
         }
-
-
     }
-
 }
